@@ -9,7 +9,8 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = env => {
     const isProd = env.NODE_ENV === 'production';
@@ -22,9 +23,11 @@ module.exports = env => {
         },
         output: {
             path: path.resolve(__dirname, 'dist/assets'),
-            chunkFilename: '[name].js',
-            filename: '[name].js',
-            publicPath: '/assets/'
+            chunkFilename: '[name].js'
+        },
+        devServer: {
+            contentBase: path.resolve(__dirname, 'dist'),
+            hot: true
         },
         module: {
             rules: [
@@ -51,7 +54,7 @@ module.exports = env => {
                         {
                             loader: 'css-loader',
                             options: {
-                                sourceMap: !isProd,
+                                sourceMap: !isProd
                             }
                         },
                         'sass-loader'
@@ -60,24 +63,33 @@ module.exports = env => {
                 {
                     test: /\.css$/,
                     use: [
-                        isProd ? MiniCssExtractPlugin.loader : 'style-loader' ,
+                        isProd ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader'
                     ]
+                },
+                // J'ai ajouté ce loader car webpack-dev-server ne watche pas les changements dans l'index.html...voir src/js/html_watcher.js
+                {
+                    test: /\.html$/,
+                    loader: 'raw-loader'
                 }
             ]
         },
         plugins: [
             new webpack.HotModuleReplacementPlugin(),
             new webpack.DefinePlugin({
-                __ENV__: env.NODE_ENV.toString()
+                // .toString() ne marche pas ?????????
+                __ENV__: '"' + env.NODE_ENV + '"'
             }),
-            new CleanWebpackPlugin(['dist/assets']),
+            new CleanWebpackPlugin(['dist/*']),
+            new WriteFilePlugin(),
             new MiniCssExtractPlugin({
                 filename: '[name].css',
                 chunkFilename: '[name].0[id].css'
             }),
             new HtmlWebpackPlugin({
-                template: path.join(__dirname, 'src/index.html')
+                template: path.join(__dirname, 'src/index.html'),
+                inject: true,
+                filename: '../index.html'
             })
         ],
         optimization: {
@@ -102,5 +114,5 @@ module.exports = env => {
                     })
             ].filter(plugin => plugin !== false)
         }
-    }
+    };
 };

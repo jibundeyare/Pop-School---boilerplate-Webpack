@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "start": "webpack --env.NODE_ENV=development",
+        "start": "webpack-dev-server --env.NODE_ENV=development --open",
         "build": "webpack --env.NODE_ENV=production"
     },
     "keywords": [],
@@ -16,8 +16,11 @@
         "@babel/plugin-proposal-object-rest-spread": "7.0.0-rc.3",
         "@babel/polyfill": "^7.0.0",
         "@babel/preset-env": "^7.0.0-rc.3",
+        "raw-loader": "^0.5.1",
         "source-map-support": "^0.5.9",
-        "webpack": "^4.17.1"
+        "uglifyjs-webpack-plugin": "^2.0.1",
+        "webpack": "^4.17.1",
+        "webpack-dev-server": "^3.1.10"
     },
     "devDependencies": {
         "babel-eslint": "^8.2.6",
@@ -33,6 +36,6 @@
         "sass-loader": "^7.0.3",
         "style-loader": "^0.21.0",
         "webpack-cli": "^3.1.0",
-        "write-file-webpack-plugin": "^4.3.2"
+        "write-file-webpack-plugin": "^4.5.0"
     }
 }

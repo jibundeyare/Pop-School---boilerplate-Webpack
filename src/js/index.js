@@ -1,5 +1,6 @@
-import foo from './test.js';
+import watchHTML from './html_watcher.js';
+import greeter from './greet.js';
 import './../styles/index.sass';
 
-console.log('hello world !');
-console.log(foo);
+watchHTML();
+greeter();
