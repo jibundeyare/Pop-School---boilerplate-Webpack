@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "start": "webpack-dev-server --env.NODE_ENV=development --open",
+        "dev": "webpack-dev-server --env.NODE_ENV=development --open",
         "build": "webpack --env.NODE_ENV=production"
     },
     "keywords": [],
