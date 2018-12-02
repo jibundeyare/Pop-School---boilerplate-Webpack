@@ -101,10 +101,6 @@ module.exports = env => {
             ]
         },
         plugins: [
-            // define an __ENV__ constant for every 
-            new webpack.DefinePlugin({
-                __ENV__: '"' + env.NODE_ENV + '"'
-            }),
             // this plugin cleans dist files
             new CleanWebpackPlugin(['dist/assets/*']),
             // write files on the system rather than just having them in RAM
