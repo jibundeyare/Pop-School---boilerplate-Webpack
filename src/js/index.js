@@ -1,6 +1,5 @@
-import watchHTML from './html_watcher.js';
 import greeter from './greet.js';
-import './../styles/index.sass';
+import '../styles/index.sass';
+import '../styles/index.css'
 
-watchHTML();
 greeter();
