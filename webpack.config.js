@@ -16,8 +16,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 // Used to minify CSS
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// Creates HTML pages from templates so we can have them in the dist directory
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 // Used to actually create files when in dev-server mode (else they're only in RAM)
 const WriteFilePlugin = require('write-file-webpack-plugin');
 
@@ -63,12 +61,6 @@ module.exports = env => {
                         }
                     }
                 },
-                // file-loader is to ensure the presence of an image that is used
-                // in JS but is not present in HTML or CSS files
-                {
-                    test: /\.(gif|png|jpe?g|svg)$/i,
-                    use: 'file-loader'
-                },
                 // SASS loader: to have SASS called automatically and CSS generated
                 // Have a look at the entry point
                 {
@@ -92,11 +84,6 @@ module.exports = env => {
                         isProd ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader'
                     ]
-                },
-                // J'ai ajouté ce loader car webpack-dev-server ne watche pas les changements dans l'index.html...voir src/js/html_watcher.js
-                {
-                    test: /\.html$/,
-                    loader: 'raw-loader'
                 }
             ]
         },
@@ -111,13 +98,7 @@ module.exports = env => {
                 chunkFilename: '[name].0[id].css'
             }),
             // we need this one to run dev
-            new webpack.HotModuleReplacementPlugin(),
-            // create an HTML file from template
-            new HtmlWebpackPlugin({
-                template: path.join(__dirname, 'src/index.html'),
-                inject: true,
-                filename: '../index.html'
-            })
+            new webpack.HotModuleReplacementPlugin()
         ],
         optimization: {
             minimizer: [
