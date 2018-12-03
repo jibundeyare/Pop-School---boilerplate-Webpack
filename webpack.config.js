@@ -14,8 +14,10 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 // Used to minify JS. It's called uglified because it was historically used to obfuscate…
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
-// Used to minify CSS
+// Used to create one CSS file
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// Used to minify CSS file
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // Used to actually create files when in dev-server mode (else they're only in RAM)
 const WriteFilePlugin = require('write-file-webpack-plugin');
 
@@ -39,7 +41,7 @@ module.exports = env => {
         // output: directory where generated JS will be saved
         output: {
             path: path.resolve(__dirname, 'dist/assets'),
-            chunkFilename: '[name].js'
+            //chunkFilename: '[name].js'
         },
         // configuration for dev environnement with live reload
         devServer: {
@@ -71,7 +73,7 @@ module.exports = env => {
                         {
                             loader: 'css-loader',
                             options: {
-                                sourceMap: !isProd
+                                sourceMap: true
                             }
                         },
                         'sass-loader'
@@ -81,9 +83,16 @@ module.exports = env => {
                 {
                     test: /\.css$/,
                     use: [
+                        !isProd && 'css-hot-loader',
                         isProd ? MiniCssExtractPlugin.loader : 'style-loader',
-                        'css-loader'
-                    ]
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+                   ].filter(loader => loader !== false)
+
                 }
             ]
         },
@@ -95,15 +104,16 @@ module.exports = env => {
             // create an minified CSS file
             new MiniCssExtractPlugin({
                 filename: '[name].css',
-                chunkFilename: '[name].0[id].css'
             }),
             // we need this one to run dev
-            new webpack.HotModuleReplacementPlugin()
+            new webpack.HotModuleReplacementPlugin(),
         ],
         optimization: {
             minimizer: [
-            // minimize JS on prod, not on dev
-                isProd && new UglifyWebpackPlugin()
+                // minimize JS on prod, not on dev
+                isProd && new UglifyWebpackPlugin({ sourceMap: true }),
+                // minimize CSS on prod. We need sophisticated options to keep the sourcemap :/
+                isProd && new OptimizeCssAssetsPlugin({ cssProcessorOptions: { map: { inline: true } } })
             ]
             // we filter because there is nothing on dev
             .filter(plugin => plugin !== false)
