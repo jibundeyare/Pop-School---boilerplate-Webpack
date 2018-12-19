@@ -93,6 +93,10 @@ module.exports = env => {
                         }
                    ].filter(loader => loader !== false)
 
+                },
+                {
+                    test: /\.(html|php|woff|woff2|eot|ttf|png|jpg|jpeg|gif|svg)$/,
+                    loader: 'file-loader' 
                 }
             ]
         },
