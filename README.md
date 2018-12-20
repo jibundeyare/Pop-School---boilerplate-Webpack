@@ -10,7 +10,9 @@ Environnement de développement simplifié pour les étudiants de Pop School Len
 
 puis
 
-`rm -R .git` pour remettre à zéro la gestion par git
+`rm -Rf .git` pour remettre à zéro la gestion par git
+
+puis modifier ce fichier README.md 😀
 
 ## Commandes
 
