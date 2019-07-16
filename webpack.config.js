@@ -66,7 +66,7 @@ module.exports = env => {
                 // SASS loader: to have SASS called automatically and CSS generated
                 // Have a look at the entry point
                 {
-                    test: /\.sass$/,
+                    test: /\.s(a|c)ss$/,
                     use: [
                         !isProd && 'css-hot-loader',
                         isProd ? MiniCssExtractPlugin.loader : 'style-loader',
