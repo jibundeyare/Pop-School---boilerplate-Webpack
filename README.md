@@ -22,5 +22,7 @@ puis modifier ce fichier README.md 😀
 
 ## TODO
 
+[] vendor prefix with postcss
 [] ESLint config
 [] Units tests (Jasmine, Jext …)
+
